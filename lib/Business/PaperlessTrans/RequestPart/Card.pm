@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001000'; # VERSION
+our $VERSION = '0.001001'; # VERSION
 
 use Moose;
 
@@ -17,7 +17,7 @@ with qw(
 );
 
 use MooseX::Types::Common::String qw( NonEmptySimpleStr );
-use MooseX::Types::CreditCard qw(
+use MooseX::Types::CreditCard 0.002 qw(
 	CardNumber
 	CardExpiration
 	CardSecurityCode
@@ -87,7 +87,7 @@ Business::PaperlessTrans::RequestPart::Card - Card
 
 =head1 VERSION
 
-version 0.001000
+version 0.001001
 
 =head1 AUTHOR
 

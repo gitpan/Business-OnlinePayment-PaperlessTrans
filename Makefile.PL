@@ -38,7 +38,7 @@ my %WriteMakefileArgs = (
     "MooseX::RemoteHelper::Types" => 0,
     "MooseX::Types::Common::Numeric" => "0.001003",
     "MooseX::Types::Common::String" => 0,
-    "MooseX::Types::CreditCard" => 0,
+    "MooseX::Types::CreditCard" => "0.002",
     "MooseX::Types::DateTime" => 0,
     "MooseX::Types::Email" => 0,
     "MooseX::Types::Locale::Currency" => 0,
@@ -54,13 +54,11 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
-    "File::Find" => 0,
-    "File::Temp" => 0,
     "Test::Method" => 0,
     "Test::More" => "0.88",
     "Test::Requires::Env" => 0
   },
-  "VERSION" => "0.001000",
+  "VERSION" => "0.001001",
   "test" => {
     "TESTS" => "t/*.t t/bop/cc/reject/*.t t/bop/cc/success/*.t t/bop/echeck/reject/*.t t/bop/echeck/success/*.t t/request/*.t"
   }
