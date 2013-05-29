@@ -3,15 +3,14 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose;
 use Class::Load 0.20 'load_class';
 use Module::Load 'load';
-use Data::Printer alias => 'Dumper';
 use Carp;
 
-use MooseX::Types::Path::Class qw( File Dir );
+use File::Spec;
 
 use XML::Compile::WSDL11;
 use XML::Compile::SOAP11;
@@ -28,14 +27,19 @@ sub submit {
 		%request = ( req => $request->serialize );
 	}
 
-	Dumper %request if $self->debug >= 1;
+	if ($self->debug >= 1 ) {
+		load 'Data::Dumper', 'Dumper';
+		carp Dumper( \%request );
+	}
 
 	my ( $answer, $trace ) = $self->_get_call( $request->type )->( %request );
 
 	carp "REQUEST >\n"  . $trace->request->as_string  if $self->debug > 1;
 	carp "RESPONSE <\n" . $trace->response->as_string if $self->debug > 1;
 
-	Dumper $answer  if $self->debug >= 1;
+	if ( $self->debug >= 1 ) {
+		carp Dumper( $answer );
+	}
 
 	my $res = $answer->{parameters}{$request->type . 'Result'};
 
@@ -61,39 +65,84 @@ sub _build_wsdl {
 
 	my $wsdl
 		= XML::Compile::WSDL11->new(
-			$self->_wsdl_file->stringify,
+			$self->_wsdl_file,
 		);
 
 	foreach my $xsd ( $self->_list_xsd_files ) {
-		$wsdl->importDefinitions( $xsd->stringify );
+		$wsdl->importDefinitions( $xsd );
 	}
 
 	return $wsdl;
 }
 
-sub _build_wsdl_file {
-	load 'File::ShareDir::ProjectDistDir', 'dist_file';
+my $dist = 'Business-OnlinePayment-PaperlessTrans';
 
-	return load_class('Path::Class::File')->new(
-		dist_file(
-			'Business-OnlinePayment-PaperlessTrans',
-			'svc.paperlesstrans.wsdl'
-		)
+sub _dist_dir_new {
+## no critic
+	my $dist = shift;
+
+	## dev environment
+	my $dev = File::Spec->catdir('share');
+	return $dev if -d $dev;
+
+	# Create the subpath
+	my $path = File::Spec->catdir(
+		'auto', 'share', 'dist', $dist,
 	);
+
+	# Find the full dir withing @INC
+	foreach my $inc ( @INC ) {
+		next unless defined $inc and ! ref $inc;
+		my $dir = File::Spec->catdir( $inc, $path );
+		next unless -d $dir;
+		unless ( -r $dir ) {
+			Carp::croak("Found directory '$dir', but no read permissions");
+		}
+		return $dir;
+	}
+
+	return undef;
+}
+
+sub _dist_dir_old { ## no critic
+## no critic
+	my $dist = shift;
+
+	# Create the subpath
+	my $path = File::Spec->catdir(
+		'auto', split( /-/, $dist ),
+	);
+
+	# Find the full dir within @INC
+	foreach my $inc ( @INC ) {
+		next unless defined $inc and ! ref $inc;
+		my $dir = File::Spec->catdir( $inc, $path );
+		next unless -d $dir;
+		unless ( -r $dir ) {
+			Carp::croak("Found directory '$dir', but no read permissions");
+		}
+		return $dir;
+	}
+
+	return undef;
+}
+
+sub _build_wsdl_file {
+	my $dir = _dist_dir_new( $dist );
+	$dir  ||= _dist_dir_old( $dist );
+
+	my $path = File::Spec->catfile( $dir, 'svc.paperlesstrans.wsdl' );
+
+	return $path;
 }
 
 sub _build_xsd_files {
-	load 'File::ShareDir::ProjectDistDir', 'dist_file';
+	my $dir = _dist_dir_new( $dist );
+	$dir  ||= _dist_dir_old( $dist );
 
 	my @xsd;
 	foreach ( 0..6 ) {
-		my $file
-			= load_class('Path::Class::File')->new(
-				dist_file(
-					'Business-OnlinePayment-PaperlessTrans',
-					"svc.paperlesstrans.$_.xsd"
-				)
-			);
+		my $file = File::Spec->catfile( $dir, "svc.paperlesstrans.$_.xsd" );
 
 		push @xsd, $file;
 	}
@@ -126,14 +175,14 @@ has _wsdl => (
 );
 
 has _wsdl_file => (
-	isa     => File,
+	isa     => 'Str',
 	lazy    => 1,
 	is      => 'ro',
 	builder => '_build_wsdl_file',
 );
 
 has _xsd_files => (
-	isa     => 'ArrayRef[Path::Class::File]',
+	isa     => 'ArrayRef[Str]',
 	traits  => ['Array'],
 	lazy    => 1,
 	is      => 'ro',
@@ -157,7 +206,7 @@ Business::PaperlessTrans::Client - PaperlessTrans Client object
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 DESCRIPTION
 
@@ -170,6 +219,11 @@ connect directly and securely for processing credit card and ACH transactions.
 =head2 submit
 
 	my $response = $client->submit( $request );
+
+=head1 ACKNOWLEDGMENTS
+
+This code contains pieces of L<File::ShareDir> that were directly copied and
+pasted. Thanks ot Adam Kennedy for creating it.
 
 =head1 AUTHOR
 

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose;
 
@@ -16,18 +16,16 @@ with qw(
 	Business::PaperlessTrans::Role::EmailAddress
 );
 
-use MooseX::Types::Common::String qw( NumericCode );
-
 has routing_number => (
 	remote_name => 'RoutingNumber',
-	isa         => NumericCode,
+	isa         => 'Num',
 	is          => 'ro',
 	required    => 1,
 );
 
 has account_number => (
 	remote_name => 'AccountNumber',
-	isa         => NumericCode,
+	isa         => 'Num',
 	is          => 'ro',
 	required    => 1,
 );
@@ -58,7 +56,7 @@ Business::PaperlessTrans::RequestPart::Check - Check
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 AUTHOR
 

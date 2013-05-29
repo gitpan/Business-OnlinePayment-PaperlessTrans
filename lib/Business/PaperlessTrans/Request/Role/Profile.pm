@@ -3,15 +3,14 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose::Role;
 use MooseX::RemoteHelper;
-use MooseX::Types::Common::String qw( NumericCode );
 
 has profile_number => (
 	remote_name => 'ProfileNumber',
-	isa         => NumericCode,
+	isa         => 'Str',
 	is          => 'ro',
 );
 
@@ -28,7 +27,7 @@ Business::PaperlessTrans::Request::Role::Profile - Test Mode
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 AUTHOR
 

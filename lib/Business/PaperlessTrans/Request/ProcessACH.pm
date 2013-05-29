@@ -3,10 +3,9 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose;
-use MooseX::Types::Common::String qw( NumericCode );
 
 extends 'Business::PaperlessTrans::Request';
 
@@ -27,7 +26,7 @@ has check => (
 
 has check_number => (
 	remote_name => 'CheckNumber',
-	isa         => NumericCode,
+	isa         => 'Str',
 	is          => 'ro',
 );
 
@@ -45,7 +44,7 @@ Business::PaperlessTrans::Request::ProcessACH - AuthorizeCard Request
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 AUTHOR
 

@@ -1,11 +1,11 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Method;
 use Class::Load 0.20 'load_class';
 
 my $req_prefix = 'Business::PaperlessTrans::Request';
 my $prefix     = $req_prefix . 'Part::';
+my $dtc        = load_class('DateTime');
 
 my $address
 	= new_ok( load_class( $prefix . 'Address' ) => [{
@@ -22,30 +22,28 @@ my $id
 		state      => 'TX',
 		number     => '12345678',
 		address    => $address,
-		expiration => {
+		expiration => $dtc->new(
 			day   => 12,
 			month => 12,
 			year  => 2009,
-		},
-		date_of_birth => {
+		),
+		date_of_birth => $dtc->new(
 			day   => 12,
 			month => 12,
 			year  => 1965,
-		},
+		),
 	}]);
 
 my $card
 	= new_ok( load_class( $prefix . 'Card' ) => [{
-		number          => '4012888888881881',
-		security_code   => '999',
-		name_on_account => 'John Doe and Associates',
-		email_address   => 'JohnDoe@TestDomain.com',
-		address         => $address,
-		identification  => $id,
-		expiration      => {
-			month => '12',
-			year  => '2012',
-		},
+		number           => '4012888888881881',
+		security_code    => '999',
+		name_on_account  => 'John Doe and Associates',
+		email_address    => 'JohnDoe@TestDomain.com',
+		address          => $address,
+		identification   => $id,
+		expiration_month => '12',
+		expiration_year  => '2012',
 	}]);
 
 my $token
@@ -65,7 +63,7 @@ my $obj
 
 can_ok $obj, 'serialize';
 
-method_ok $obj, serialize => [], {
+is_deeply $obj->serialize, {
 	Token => {
 		TerminalID  => '00000000-0000-0000-0000-000000000000',
 		TerminalKey => '000000000',

@@ -3,15 +3,14 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose::Role;
 use MooseX::RemoteHelper;
-use MooseX::Types::Common::String qw( NonEmptySimpleStr );
 
 has name_on_account => (
 	remote_name => 'NameOnAccount',
-	isa         => NonEmptySimpleStr,
+	isa         => 'Str',
 	is          => 'ro',
 	required    => 1,
 );
@@ -29,7 +28,7 @@ Business::PaperlessTrans::Role::NameOnAccount - name associated with the account
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 AUTHOR
 

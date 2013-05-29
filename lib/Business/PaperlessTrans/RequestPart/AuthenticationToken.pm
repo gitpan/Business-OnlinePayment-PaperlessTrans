@@ -3,24 +3,21 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose;
 
 extends 'Business::PaperlessTrans::MessagePart';
 with qw( MooseX::RemoteHelper::CompositeSerialization );
 
-use MooseX::Types::Common::String qw( NumericCode );
-use MooseX::Types::UUID qw( UUID );
-
 has terminal_id => (
-	isa         => UUID,
+	isa         => 'Str',
 	is          => 'ro',
 	remote_name => 'TerminalID',
 );
 
 has terminal_key => (
-	isa         => NumericCode,
+	isa         => 'Num',
 	is          => 'ro',
 	remote_name => 'TerminalKey',
 );
@@ -39,7 +36,7 @@ Business::PaperlessTrans::RequestPart::AuthenticationToken - Authentication Toke
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 ATTRIBUTES
 

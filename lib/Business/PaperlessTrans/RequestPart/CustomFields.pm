@@ -3,18 +3,16 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.001001'; # VERSION
+our $VERSION = '0.001002'; # VERSION
 
 use Moose;
 extends 'Business::PaperlessTrans::MessagePart';
 with 'MooseX::RemoteHelper::CompositeSerialization';
 
-use MooseX::Types::Common::String qw( NonEmptySimpleStr );
-
 foreach my $i ( 1..30 ) {
 	has "field_$i" => (
 		remote_name => "Field_$i",
-		isa         => NonEmptySimpleStr,
+		isa         => 'Str',
 		is          => 'ro',
 	);
 }
@@ -33,7 +31,7 @@ Business::PaperlessTrans::RequestPart::CustomFields - CustomFields
 
 =head1 VERSION
 
-version 0.001001
+version 0.001002
 
 =head1 AUTHOR
 
