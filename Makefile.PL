@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.008;
+
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -23,23 +23,12 @@ my %WriteMakefileArgs = (
   "LICENSE" => "artistic_2",
   "NAME" => "Business::OnlinePayment::PaperlessTrans",
   "PREREQ_PM" => {
-    "Business::OnlinePayment" => 0,
-    "Carp" => 0,
-    "File::ShareDir" => 0,
-    "LWP::Protocol::https" => 0,
-    "Module::Load" => 0,
-    "XML::Compile::SOAP11" => 0,
-    "XML::Compile::Transport::SOAPHTTP" => 0,
-    "XML::Compile::WSDL11" => 0,
-    "parent" => 0,
-    "strict" => 0,
-    "warnings" => 0
+    "LWP::Protocol::https" => 0
   },
   "TEST_REQUIRES" => {
-    "DateTime" => 0,
     "Test::More" => "0.88"
   },
-  "VERSION" => "0.001004",
+  "VERSION" => "0.001005",
   "test" => {
     "TESTS" => "t/*.t t/cc/*.t t/echeck/reject/*.t t/echeck/success/*.t"
   }

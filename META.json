@@ -35,27 +35,12 @@
          }
       },
       "runtime" : {
-         "recommends" : {
-            "DateTime" : "0"
-         },
          "requires" : {
-            "Business::OnlinePayment" : "0",
-            "Carp" : "0",
-            "File::ShareDir" : "0",
-            "LWP::Protocol::https" : "0",
-            "Module::Load" : "0",
-            "XML::Compile::SOAP11" : "0",
-            "XML::Compile::Transport::SOAPHTTP" : "0",
-            "XML::Compile::WSDL11" : "0",
-            "parent" : "0",
-            "perl" : "5.008",
-            "strict" : "0",
-            "warnings" : "0"
+            "LWP::Protocol::https" : "0"
          }
       },
       "test" : {
          "requires" : {
-            "DateTime" : "0",
             "Test::More" : "0.88"
          }
       }
@@ -63,7 +48,7 @@
    "provides" : {
       "Business::OnlinePayment::PaperlessTrans" : {
          "file" : "lib/Business/OnlinePayment/PaperlessTrans.pm",
-         "version" : "0.001004"
+         "version" : "0.001005"
       }
    },
    "release_status" : "stable",
@@ -78,6 +63,6 @@
          "web" : "https://github.com/xenoterracide/business-onlinepayment-paperlesstrans"
       }
    },
-   "version" : "0.001004"
+   "version" : "0.001005"
 }
 
